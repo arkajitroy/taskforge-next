@@ -13,14 +13,8 @@ import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema, TLoginFormSchema } from "@/validations/schemas/auth";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import DottedSeperator from "@/components/custom/dotted-seperator";
 
 export default function SignInCard() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -48,12 +42,12 @@ export default function SignInCard() {
         <Form {...loginForm}>
           <form onSubmit={loginForm.handleSubmit(formSubmitHandler)} className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
               <FormField<TLoginFormSchema>
                 name="email"
                 control={loginForm.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input {...field} id="email" placeholder="mike@example.com" type="email" />
                     </FormControl>
@@ -69,12 +63,17 @@ export default function SignInCard() {
                   name="password"
                   control={loginForm.control}
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="password"
-                      placeholder="Enter your password"
-                      type={showPassword ? "text" : "password"}
-                    />
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          id="password"
+                          placeholder="Enter your password"
+                          type={showPassword ? "text" : "password"}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
                 />
 
@@ -117,7 +116,7 @@ export default function SignInCard() {
           </Button>
         </div>
         <p className="text-center text-sm text-gray-600">
-          By signing up, you agree to our{" "}
+          By signing in, you agree to our{" "}
           <Link className="underline hover:text-primary" href="/terms">
             Terms of Service
           </Link>{" "}
@@ -126,6 +125,13 @@ export default function SignInCard() {
             Privacy Policy
           </Link>
           .
+        </p>
+        <DottedSeperator className="w-full" />
+        <p className="text-center text-sm text-gray-600">
+          Don&apos;t have an account{" "}
+          <Link className="underline text-blue-600 font-semibold" href="/register">
+            Sign Up
+          </Link>
         </p>
       </CardContent>
     </Card>
