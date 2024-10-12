@@ -10,9 +10,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginFormSchema, TLoginFormSchema } from "@/validations/schemas/auth";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export default function SignInCard() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const loginForm = useForm<TLoginFormSchema>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const formSubmitHandler = (formData: TLoginFormSchema) => {
+    console.log("SUBMIT : ", formData);
+    loginForm.reset();
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg">
@@ -21,39 +45,59 @@ export default function SignInCard() {
         <CardDescription className="text-center">Quickly login to access the tool</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <form className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" placeholder="mike@example.com" required type="email" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
-              <Input
-                id="password"
-                placeholder="Enter your password"
-                required
-                type={showPassword ? "text" : "password"}
-              />
-              <Button
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
-                type="button"
-                variant="ghost"
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <Eye className="h-4 w-4 text-gray-500" />
+        <Form {...loginForm}>
+          <form onSubmit={loginForm.handleSubmit(formSubmitHandler)} className="space-y-4">
+            <div className="space-y-2">
+              <FormField<TLoginFormSchema>
+                name="email"
+                control={loginForm.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} id="email" placeholder="mike@example.com" type="email" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-                <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
-              </Button>
+              />
             </div>
-          </div>
-          <Button className="w-full" type="submit">
-            Login
-          </Button>
-        </form>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <FormField<TLoginFormSchema>
+                  name="password"
+                  control={loginForm.control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="password"
+                      placeholder="Enter your password"
+                      type={showPassword ? "text" : "password"}
+                    />
+                  )}
+                />
+
+                <Button
+                  className="absolute right-0 top-0 h-full px-3 py-2"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                  variant="ghost"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-500" />
+                  )}
+                </Button>
+              </div>
+            </div>
+            <Button className="w-full" type="submit">
+              Login
+            </Button>
+          </form>
+        </Form>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <Separator className="w-full" />
