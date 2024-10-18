@@ -15,11 +15,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import DottedSeperator from "@/components/custom/dotted-seperator";
+import { useRegistration } from "../api/use-register";
 
 export default function SignUpCard() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const { mutate } = useRegistration();
 
   const registerForm = useForm<TRegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
@@ -35,7 +37,8 @@ export default function SignUpCard() {
       alert("please check the password!");
       return;
     }
-    console.log("SUBMIT : ", formData);
+    mutate({ json: formData });
+    console.log("DEBUG-REGISTER-SUBMIT : ", formData);
     registerForm.reset();
     setConfirmPassword("");
   };
