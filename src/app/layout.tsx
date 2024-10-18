@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
-
+import Providers from "./providers";
 import "./globals.css";
 
 const appFont = Inter({
@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(appFont.className, "antialiased min-h-screen")}>{children}</body>
+      <body className={cn(appFont.className, "antialiased min-h-screen")}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
