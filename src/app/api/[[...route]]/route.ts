@@ -1,20 +1,17 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
+import AuthRoute from "@/features/auth/server/route";
 
 const app = new Hono().basePath("/api");
 
-app.get("/app", (request) => {
-  return request.json({
-    data: "API Running!",
-  });
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const routes = app.route("/auth", AuthRoute);
 
-app.get("/project/:projectId", (request) => {
-  const { projectId } = request.req.param();
-
-  return request.json({
-    data: projectId,
-  });
-});
-
+// initializing the http-request
 export const GET = handle(app);
+export const POST = handle(app);
+export const PATCH = handle(app);
+export const PUT = handle(app);
+export const DELETE = handle(app);
+
+export type AppRouteType = typeof routes;
