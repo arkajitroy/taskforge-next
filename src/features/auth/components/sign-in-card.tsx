@@ -15,9 +15,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema, TLoginFormSchema } from "@/validations/schemas/auth";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import DottedSeperator from "@/components/custom/dotted-seperator";
+import { useLogin } from "../api/use-login";
 
 export default function SignInCard() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { mutate } = useLogin();
 
   const loginForm = useForm<TLoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -28,7 +30,8 @@ export default function SignInCard() {
   });
 
   const formSubmitHandler = (formData: TLoginFormSchema) => {
-    console.log("SUBMIT : ", formData);
+    console.log("DEBUG-LOGIN-SUBMIT : ", formData);
+    mutate({ json: formData });
     loginForm.reset();
   };
 
