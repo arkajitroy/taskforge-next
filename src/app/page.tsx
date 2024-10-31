@@ -1,21 +1,11 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { useCurrentUser } from "@/features/auth/api/use-current-user";
-import { useLogout } from "@/features/auth/api/use-logout";
-import { LogOut } from "lucide-react";
+import { getCurrentUser } from "@/features/auth/actions/action";
 import UserAuthButton from "@/features/auth/components/user-button";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
-  const { data, isLoading } = useCurrentUser();
-  const { mutate } = useLogout();
+export default async function Home() {
+  const user = await getCurrentUser();
 
-  useEffect(() => {
-    if (!data && !isLoading) router.push("/login");
-  }, [data, isLoading, router]);
+  if (!user) redirect("/login");
 
   return (
     <main className="flex justify-between py-2 px-4 items-center">
