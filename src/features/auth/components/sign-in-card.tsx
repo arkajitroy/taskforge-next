@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ import { useLogin } from "../api/use-login";
 
 export default function SignInCard() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { mutate } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   const loginForm = useForm<TLoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -52,7 +52,13 @@ export default function SignInCard() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} id="email" placeholder="mike@example.com" type="email" />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        id="email"
+                        placeholder="mike@example.com"
+                        type="email"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -69,6 +75,7 @@ export default function SignInCard() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          disabled={isPending}
                           {...field}
                           id="password"
                           placeholder="Enter your password"
@@ -95,8 +102,9 @@ export default function SignInCard() {
                 </Button>
               </div>
             </div>
-            <Button className="w-full" type="submit">
+            <Button disabled={isPending} className="w-full" type="submit">
               Login
+              {isPending && <Loader className="px-2 size-8 animate-spin text-gray-400" />}
             </Button>
           </form>
         </Form>
@@ -109,11 +117,11 @@ export default function SignInCard() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Button variant="outline">
+          <Button disabled={isPending} variant="outline">
             <FcGoogle className="mr-2 h-4 w-4" />
             Google
           </Button>
-          <Button variant="outline">
+          <Button disabled={isPending} variant="outline">
             <FaGithub className="mr-2 h-4 w-4" />
             GitHub
           </Button>

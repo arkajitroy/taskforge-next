@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ export default function SignUpCard() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const { mutate } = useRegistration();
+  const { mutate, isPending } = useRegistration();
 
   const registerForm = useForm<TRegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
@@ -62,7 +62,12 @@ export default function SignUpCard() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} id="name" placeholder="Enter your name" />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        id="name"
+                        placeholder="Enter your name"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -77,7 +82,13 @@ export default function SignUpCard() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} id="email" placeholder="mike@example.com" type="email" />
+                      <Input
+                        disabled={isPending}
+                        {...field}
+                        id="email"
+                        placeholder="mike@example.com"
+                        type="email"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -96,6 +107,7 @@ export default function SignUpCard() {
                         <Input
                           {...field}
                           id="password"
+                          disabled={isPending}
                           placeholder="Enter your password"
                           type={showPassword ? "text" : "password"}
                         />
@@ -127,6 +139,7 @@ export default function SignUpCard() {
               <div className="relative">
                 <Input
                   id="confirm-password"
+                  disabled={isPending}
                   placeholder="Confirm your password"
                   value={confirmPassword}
                   type={showConfirmPassword ? "text" : "password"}
@@ -151,6 +164,7 @@ export default function SignUpCard() {
             </div>
             <Button className="w-full" type="submit">
               Sign up
+              {isPending && <Loader className="px-2 size-8 animate-spin text-gray-400" />}
             </Button>
           </form>
         </Form>
@@ -163,11 +177,11 @@ export default function SignUpCard() {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Button variant="outline">
+          <Button disabled={isPending} variant="outline">
             <FcGoogle className="mr-2 h-4 w-4" />
             Google
           </Button>
-          <Button variant="outline">
+          <Button disabled={isPending} variant="outline">
             <FaGithub className="mr-2 h-4 w-4" />
             GitHub
           </Button>
