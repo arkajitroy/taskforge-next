@@ -8,9 +8,8 @@ export default async function Home() {
   if (!user) redirect("/login");
 
   return (
-    <main className="flex justify-between py-2 px-4 items-center">
-      <span className="text-red-700 font-semibold">Authorized User</span>
-      <UserAuthButton />
-    </main>
+    <div>
+      <span className="text-red-700 font-semibold">Dashboard Page</span>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import Navbar from "@/components/common/Navbar";
 import Sidebar from "@/components/common/sidebar";
 import React, { PropsWithChildren } from "react";
 
@@ -9,9 +10,9 @@ export default function Dashboardlayout({ children }: PropsWithChildren) {
           <Sidebar />
         </div>
 
-        <div className="lg:pl-[264px]">
+        <div className="lg:pl-[264px] w-full">
           <div className="mx-auto max-w-screen-2xl h-full">
-            {/* // todo : Add Navbar  */}
+            <Navbar />
             <main className="h-full py-8 px-6 flex flex-col">{children}</main>
           </div>
         </div>
