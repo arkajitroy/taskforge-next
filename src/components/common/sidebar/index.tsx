@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import DottedSeperator from "../../custom/dotted-seperator";
 import SidebarNavigations from "./navigations";
+import WorkspaceSwitcher from "@/features/workspaces/components/workspace-switcher";
 
 const Sidebar: React.FC = () => {
   return (
@@ -16,6 +17,8 @@ const Sidebar: React.FC = () => {
           alt="brand-logo"
         />
       </Link>
+      <DottedSeperator className="my-4" />
+      <WorkspaceSwitcher />
       <DottedSeperator className="my-4" />
       <SidebarNavigations />
     </aside>

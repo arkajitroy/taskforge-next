@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <div>
       <span className="text-red-700 font-semibold">Dashboard Page</span>
-      <CreateWorkspaceForm />
+      {/* <CreateWorkspaceForm /> */}
     </div>
   );
 }

@@ -57,7 +57,15 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
       imageURL: values.imageURL instanceof File ? values.imageURL : "",
     };
 
-    mutate({ form: formDataPayload });
+    mutate(
+      { form: formDataPayload },
+      {
+        onSuccess: () => {
+          form.reset();
+          // TODO: redirect to new workspace
+        },
+      }
+    );
   };
 
   return (
