@@ -12,8 +12,8 @@ export const useCreateWorkspace = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async (json) => {
-      const response = await RPCClient.api.workspace["$post"](json);
+    mutationFn: async ({ form }) => {
+      const response = await RPCClient.api.workspace["$post"]({ form });
       return await response.json();
     },
     onSuccess: () => {
