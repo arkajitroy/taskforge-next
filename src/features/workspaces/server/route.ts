@@ -5,11 +5,15 @@ import { createWorkspaceAPIValidator } from "@/validations/routes/workspace";
 import { Hono } from "hono";
 import { ID } from "node-appwrite";
 
-const app = new Hono().post(
-  "/",
-  createWorkspaceAPIValidator,
-  sessionMiddleware,
-  async (c) => {
+const app = new Hono()
+  .get("/", sessionMiddleware, async (c) => {
+    const databases = c.get("databases");
+
+    const workspaces = await databases.listDocuments(DATABASE_ID, WORKSPACE_ID);
+
+    return c.json({ data: workspaces });
+  })
+  .post("/", createWorkspaceAPIValidator, sessionMiddleware, async (c) => {
     const databases = c.get("databases");
     const storage = c.get("storage");
 
@@ -43,7 +47,6 @@ const app = new Hono().post(
     );
 
     return c.json({ data: workspace });
-  }
-);
+  });
 
 export default app;

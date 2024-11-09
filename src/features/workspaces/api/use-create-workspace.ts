@@ -4,8 +4,8 @@ import { RPCClient } from "@/lib/rpc";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-type ResponseType = InferResponseType<(typeof RPCClient.api.workspace)["$post"]>;
-type RequestType = InferRequestType<(typeof RPCClient.api.workspace)["$post"]>;
+type ResponseType = InferResponseType<(typeof RPCClient.api.workspaces)["$post"]>;
+type RequestType = InferRequestType<(typeof RPCClient.api.workspaces)["$post"]>;
 
 export const useCreateWorkspace = () => {
   const router = useRouter();
@@ -13,7 +13,7 @@ export const useCreateWorkspace = () => {
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ form }) => {
-      const response = await RPCClient.api.workspace["$post"]({ form });
+      const response = await RPCClient.api.workspaces["$post"]({ form });
       return await response.json();
     },
     onSuccess: () => {

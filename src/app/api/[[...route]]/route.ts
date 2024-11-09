@@ -5,7 +5,7 @@ import WorkspaceRoute from "@/features/workspaces/server/route";
 
 const app = new Hono().basePath("/api");
 
-const routes = app.route("/auth", AuthRoute).route("/workspace", WorkspaceRoute);
+const routes = app.route("/auth", AuthRoute).route("/workspaces", WorkspaceRoute);
 
 // initializing the http-request
 export const GET = handle(app);
