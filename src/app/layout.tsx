@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Providers from "./providers";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const appFont = Inter({
   subsets: ["latin"],
@@ -21,7 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(appFont.className, "antialiased min-h-screen")}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Toaster />
+          {children}
+        </Providers>
       </body>
     </html>
   );

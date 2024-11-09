@@ -19,6 +19,7 @@ const app = new Hono().post(
       WORKSPACE_ID,
       ID.unique(),
       {
+        userId: user.$id,
         name,
       }
     );
