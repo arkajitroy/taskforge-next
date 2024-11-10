@@ -2,6 +2,7 @@ import { DATABASE_ID, IMAGES_BUCKET_ID, MEMBERS_ID, WORKSPACE_ID } from "@/confi
 import { Base64ImageURLIntials } from "@/constants/misc";
 import { MembersRole } from "@/features/members/others/types";
 import sessionMiddleware from "@/lib/session-middleware";
+import { generateInvitationCode } from "@/lib/utils";
 import { createWorkspaceAPIValidator } from "@/validations/routes/workspace";
 import { Hono } from "hono";
 import { ID, Query } from "node-appwrite";
@@ -21,8 +22,6 @@ const app = new Hono()
 
     const workspaceIDs = members.documents.map((member) => member.workspaceID);
 
-    console.log("DEBUG-workspaceIDs", workspaceIDs);
-
     const workspaces = await databases.listDocuments(DATABASE_ID, WORKSPACE_ID, [
       Query.contains("$id", workspaceIDs),
       Query.orderDesc("$createdAt"),
@@ -37,8 +36,6 @@ const app = new Hono()
     const user = c.get("user");
 
     const { name, imageURL } = c.req.valid("form");
-
-    console.log("DEBUG : (1) => ", { name, imageURL });
 
     let uploadedImageURL: string | undefined;
 
@@ -60,6 +57,7 @@ const app = new Hono()
         userId: user.$id,
         name,
         imageURL: uploadedImageURL,
+        inviteCode: generateInvitationCode(6),
       }
     );
 
