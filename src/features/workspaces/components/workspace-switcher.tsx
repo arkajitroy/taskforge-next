@@ -12,9 +12,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import WorkspaceAvatar from "./workspace-avatar";
+import { useRouter } from "next/navigation";
+import { useWorkspaceId } from "../hooks/use-workspace-id";
 
 const WorkspaceSwitcher = () => {
   const { data: workspaces } = useGetWorkspace();
+  const workspaceID = useWorkspaceId();
+  const router = useRouter();
+
+  const onSelect = (id: string) => {
+    router.push(`/workspaces/${id}`);
+  };
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -25,13 +33,13 @@ const WorkspaceSwitcher = () => {
         </CustomToolTip>
       </div>
       {/* //! ==================== (WORKSPACE SELECT COMP.) ===================== */}
-      <Select>
+      <Select onValueChange={onSelect} value={workspaceID}>
         <SelectTrigger className="w-full h-fit bg-neutral-200 font-medium p-1">
           <SelectValue placeholder="No workspace selected" />
         </SelectTrigger>
         <SelectContent>
           {workspaces?.documents.map((workspace) => (
-            <SelectItem key={workspace.$id} value={workspace.name}>
+            <SelectItem key={workspace.$id} value={workspace.$id}>
               <div className="flex justify-start items-center gap-3 font-medium">
                 <WorkspaceAvatar name={workspace.name} imageURL={workspace.imageURL} />
                 <span className="truncate">{workspace.name}</span>
