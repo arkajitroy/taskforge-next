@@ -14,9 +14,11 @@ import {
 import WorkspaceAvatar from "./workspace-avatar";
 import { useRouter } from "next/navigation";
 import { useWorkspaceId } from "../hooks/use-workspace-id";
+import { useCreateWorkspaceModal } from "../hooks/use-create-workspace-modal";
 
 const WorkspaceSwitcher = () => {
   const { data: workspaces } = useGetWorkspace();
+  const { open } = useCreateWorkspaceModal();
   const workspaceID = useWorkspaceId();
   const router = useRouter();
 
@@ -29,7 +31,10 @@ const WorkspaceSwitcher = () => {
       <div className="flex items-center justify-between">
         <p className="text-xs uppercase text-neutral-500">Workspace Switcher</p>
         <CustomToolTip tooltipText="Create new workspace">
-          <RiAddCircleFill className="size-5 text-neutral-600 cursor-pointer hover:opacity-75 transition" />
+          <RiAddCircleFill
+            onClick={open}
+            className="size-5 text-neutral-600 cursor-pointer hover:opacity-75 transition"
+          />
         </CustomToolTip>
       </div>
       {/* //! ==================== (WORKSPACE SELECT COMP.) ===================== */}
