@@ -6,14 +6,26 @@ import { Eye, EyeOff, Loader } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema, TLoginFormSchema } from "@/validations/schemas/auth";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import DottedSeperator from "@/components/custom/dotted-seperator";
 import { useLogin } from "../api/use-login";
 
@@ -38,14 +50,21 @@ export default function SignInCard() {
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Welcome to Taskforge</CardTitle>
-        <CardDescription className="text-center">Quickly login to access the tool</CardDescription>
+        <CardTitle className="text-2xl font-bold text-center">
+          Welcome to Taskforge
+        </CardTitle>
+        <CardDescription className="text-center">
+          Quickly login to access the tool
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Form {...loginForm}>
-          <form onSubmit={loginForm.handleSubmit(formSubmitHandler)} className="space-y-4">
+          <form
+            onSubmit={loginForm.handleSubmit(formSubmitHandler)}
+            className="space-y-4"
+          >
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Email Address</Label>
               <FormField<TLoginFormSchema>
                 name="email"
                 control={loginForm.control}
@@ -113,7 +132,9 @@ export default function SignInCard() {
             <Separator className="w-full" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">

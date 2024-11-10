@@ -1,15 +1,32 @@
-import { DATABASE_ID, IMAGES_BUCKET_ID, WORKSPACE_ID } from "@/config/db";
+import { DATABASE_ID, IMAGES_BUCKET_ID, MEMBERS_ID, WORKSPACE_ID } from "@/config/db";
 import { Base64ImageURLIntials } from "@/constants/misc";
+import { MembersRole } from "@/features/members/others/types";
 import sessionMiddleware from "@/lib/session-middleware";
 import { createWorkspaceAPIValidator } from "@/validations/routes/workspace";
 import { Hono } from "hono";
-import { ID } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
 
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
+    const user = c.get("user");
     const databases = c.get("databases");
 
-    const workspaces = await databases.listDocuments(DATABASE_ID, WORKSPACE_ID);
+    const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
+      Query.equal("userID", user.$id),
+    ]);
+
+    if (!members.documents.length || members.total === 0) {
+      return c.json({ data: { documents: [], total: 0 } });
+    }
+
+    const workspaceIDs = members.documents.map((member) => member.workspaceID);
+
+    console.log("DEBUG-workspaceIDs", workspaceIDs);
+
+    const workspaces = await databases.listDocuments(DATABASE_ID, WORKSPACE_ID, [
+      Query.contains("$id", workspaceIDs),
+      Query.orderDesc("$createdAt"),
+    ]);
 
     return c.json({ data: workspaces });
   })
@@ -45,6 +62,13 @@ const app = new Hono()
         imageURL: uploadedImageURL,
       }
     );
+
+    // adding the actual member to the workspace
+    await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
+      userID: user.$id,
+      workspaceID: workspace.$id,
+      role: MembersRole.ADMIN,
+    });
 
     return c.json({ data: workspace });
   });
