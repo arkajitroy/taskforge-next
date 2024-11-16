@@ -1,9 +1,15 @@
 "use server";
 
-import { cookies } from "next/headers";
-import { AUTH_COOKIE } from "@/features/auth/others/constants";
-import { Account, Client, Databases, Query } from "node-appwrite";
 import { DATABASE_ID, MEMBERS_ID, WORKSPACE_ID } from "@/config/db";
+import { AUTH_COOKIE } from "@/features/auth/others/constants";
+import { cookies } from "next/headers";
+import { Account, Client, Databases, Query } from "node-appwrite";
+import { getMemberService } from "../services";
+
+// prop types
+type TGetWorkspaceActionProps = {
+  workspaceId: string;
+};
 
 export const getCurrentWorkspaces = async () => {
   try {
@@ -19,7 +25,6 @@ export const getCurrentWorkspaces = async () => {
 
     const databases = new Databases(client);
     const account = new Account(client);
-
     const user = await account.get();
 
     const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
@@ -40,5 +45,37 @@ export const getCurrentWorkspaces = async () => {
     return workspaces;
   } catch (error) {
     return { documents: [], total: 0 };
+  }
+};
+
+export const getCurrentWorkspace = async ({ workspaceId }: TGetWorkspaceActionProps) => {
+  try {
+    const client = new Client()
+      .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+    const session = await cookies().get(AUTH_COOKIE);
+
+    if (!session) return null;
+
+    client.setSession(session.value);
+
+    const account = new Account(client);
+    const database = new Databases(client);
+    const user = await account.get();
+
+    const member = await getMemberService({
+      database,
+      workspaceId,
+      userId: user.$id,
+    });
+
+    if (!member) return null;
+
+    const workspace = await database.getDocument(DATABASE_ID, WORKSPACE_ID, workspaceId);
+
+    return workspace;
+  } catch (error) {
+    return null;
   }
 };
