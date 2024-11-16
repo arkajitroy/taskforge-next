@@ -2,7 +2,7 @@ import React from "react";
 import { getCurrentUser } from "@/features/auth/queries";
 import { redirect } from "next/navigation";
 import { ModifyWorkspaceForm } from "@/features/workspaces/components/modify-workspace-form";
-import { getCurrentWorkspace } from "@/features/workspaces/actions";
+import { getCurrentWorkspace } from "@/features/workspaces/queries";
 
 type TWorkspaceIdSettingsPageProps = {
   params: {
