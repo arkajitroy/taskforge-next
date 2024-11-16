@@ -27,6 +27,7 @@ import { useCreateWorkspace } from "../api/use-create-workspace";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type TCreateWorkspaceFormProps = {
   onCancel?: () => void;
@@ -160,7 +161,12 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
           </CardContent>
 
           <CardFooter className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={onCancel} disabled={isPending}>
+            <Button
+              variant="outline"
+              onClick={onCancel}
+              disabled={isPending}
+              className={cn(!onCancel && "invisible")}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isPending}>
