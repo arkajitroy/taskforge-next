@@ -29,13 +29,13 @@ export const useModifyWorkspace = () => {
 
       return result;
     },
-    onSuccess: () => {
-      toast.success("Successfully created!", {
-        description: "A new workspace has been added to your system.",
+    onSuccess: ({ data }) => {
+      toast.success("Successfully Modified!", {
+        description: "Your workspace settings has been updated.",
       });
       router.refresh();
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
-      // queryClient.invalidateQueries({ queryKey: ["workspace", data.$id] });
+      queryClient.invalidateQueries({ queryKey: ["workspace", data.$id] });
     },
     onError: () => {
       toast.error("Oops! Something went wrong", {

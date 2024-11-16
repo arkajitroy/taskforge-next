@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const workspaceSchema = z.object({
+export const createWorkspaceSchema = z.object({
   name: z.string().trim().min(1, "Required"),
   imageURL: z
     .union([
@@ -10,4 +10,15 @@ export const workspaceSchema = z.object({
     .optional(),
 });
 
-export type TWorkspaceSchema = z.infer<typeof workspaceSchema>;
+export const modifyWorkspaceSchema = z.object({
+  name: z.string().trim().min(1, "Must be 1 or more characters").optional(),
+  imageURL: z
+    .union([
+      z.instanceof(File),
+      z.string().transform((value) => (value === "" ? undefined : value)),
+    ])
+    .optional(),
+});
+
+export type TCreateWorkspaceSchema = z.infer<typeof createWorkspaceSchema>;
+export type TModifyWorkspaceSchema = z.infer<typeof modifyWorkspaceSchema>;

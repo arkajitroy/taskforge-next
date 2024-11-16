@@ -21,33 +21,36 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ImageIcon, X } from "lucide-react";
-import { useCreateWorkspace } from "../api/use-create-workspace";
+import { ArrowLeftIcon, ImageIcon, X } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
-  createWorkspaceSchema,
-  TCreateWorkspaceSchema,
+  modifyWorkspaceSchema,
+  TModifyWorkspaceSchema,
 } from "@/validations/schemas/workspace";
+import { TWorkspace } from "../others/types";
+import { useModifyWorkspace } from "../api/use-modify-workspace";
 
-type TCreateWorkspaceFormProps = {
+type TModifyWorkspaceFormProps = {
   onCancel?: () => void;
+  initialValues: TWorkspace;
 };
 
-export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
+export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
   onCancel,
+  initialValues,
 }) => {
-  const { mutate, isPending } = useCreateWorkspace();
+  const { mutate, isPending } = useModifyWorkspace();
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const form = useForm<TCreateWorkspaceSchema>({
-    resolver: zodResolver(createWorkspaceSchema),
+  const form = useForm<TModifyWorkspaceSchema>({
+    resolver: zodResolver(modifyWorkspaceSchema),
     defaultValues: {
-      name: "",
-      imageURL: "",
+      ...initialValues,
+      imageURL: initialValues.imageURL ?? "",
     },
   });
 
@@ -56,7 +59,12 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
     if (file) form.setValue("imageURL", file);
   };
 
-  const onSubmit = (values: TCreateWorkspaceSchema) => {
+  const handleOnCancel = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    return onCancel ? onCancel : router.push(`/workspaces/${initialValues.$id}`);
+  };
+
+  const onSubmit = (values: TModifyWorkspaceSchema) => {
     console.log("DEBUG: ONSUBMIT CREATE WORKSPACE", { values });
     const formDataPayload = {
       ...values,
@@ -64,7 +72,7 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
     };
 
     mutate(
-      { form: formDataPayload },
+      { form: formDataPayload, param: { workspaceId: initialValues.$id } },
       {
         onSuccess: ({ data }) => {
           form.reset();
@@ -77,15 +85,26 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
   return (
     <Card className="w-full relative shadow-none border-none">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold">Create Workspace</CardTitle>
-            <CardDescription>
-              Create a new workspace to organize your projects and collaborate with your
-              team.
-            </CardDescription>
-          </CardHeader>
+        <CardHeader>
+          <div className="flex flex-row items-center gap-x-4 py-2 space-y-0">
+            <Button
+              className="gap-2"
+              size={"sm"}
+              variant={"secondary"}
+              onClick={handleOnCancel}
+            >
+              <ArrowLeftIcon size={14} />
+              Back
+            </Button>
+            <CardTitle className="text-2xl font-bold">Modify Workspace</CardTitle>
+          </div>
 
+          <CardDescription>
+            Modify your {initialValues.name} workspace to organize your projects and
+            collaborate with your team.
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
             <FormField
               control={form.control}
@@ -188,7 +207,7 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
               Cancel
             </Button>
             <Button type="submit" disabled={isPending}>
-              Create Workspace
+              Save Changes
             </Button>
           </CardFooter>
         </form>
