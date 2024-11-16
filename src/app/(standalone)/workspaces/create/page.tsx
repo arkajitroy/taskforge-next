@@ -1,6 +1,6 @@
 import React from "react";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/features/auth/actions/action";
+import { getCurrentUser } from "@/features/auth/queries";
 import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form";
 
 export default async function WorkspaceCreatePage() {

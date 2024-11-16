@@ -1,5 +1,5 @@
 import React from "react";
-import { getCurrentUser } from "@/features/auth/actions/action";
+import { getCurrentUser } from "@/features/auth/queries";
 import { redirect } from "next/navigation";
 
 export default async function WorkspaceIdPage() {
