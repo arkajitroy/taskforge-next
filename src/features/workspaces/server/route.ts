@@ -118,6 +118,29 @@ const app = new Hono()
     );
 
     return c.json({ data: workspace });
+  })
+  // - ============================= (MODIFY WOKRSPACE API) ==================================
+  .delete("/:workspaceId", sessionMiddleware, async (c) => {
+    const database = c.get("databases");
+    const user = c.get("user");
+
+    const { workspaceId } = c.req.param();
+
+    const member = await getMemberService({
+      database,
+      workspaceId,
+      userId: user.$id,
+    });
+
+    if (!member || member.role !== MembersRole.ADMIN) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    // TODO: Delete Members, Projects and Tasks
+
+    await database.deleteDocument(DATABASE_ID, WORKSPACE_ID, workspaceId);
+
+    return c.json({ data: { $id: workspaceId } });
   });
 
 export default app;
