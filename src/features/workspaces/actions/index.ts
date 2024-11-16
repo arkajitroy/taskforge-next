@@ -5,6 +5,7 @@ import { AUTH_COOKIE } from "@/features/auth/others/constants";
 import { cookies } from "next/headers";
 import { Account, Client, Databases, Query } from "node-appwrite";
 import { getMemberService } from "../services";
+import { TWorkspace } from "../others/types";
 
 // prop types
 type TGetWorkspaceActionProps = {
@@ -64,15 +65,17 @@ export const getCurrentWorkspace = async ({ workspaceId }: TGetWorkspaceActionPr
     const database = new Databases(client);
     const user = await account.get();
 
-    const member = await getMemberService({
-      database,
-      workspaceId,
-      userId: user.$id,
-    });
+    console.log("DEBUG-PAYLOAD", { account, database, user });
+
+    const member = await getMemberService({ database, userId: user.$id, workspaceId });
 
     if (!member) return null;
 
-    const workspace = await database.getDocument(DATABASE_ID, WORKSPACE_ID, workspaceId);
+    const workspace = await database.getDocument<TWorkspace>(
+      DATABASE_ID,
+      WORKSPACE_ID,
+      workspaceId
+    );
 
     return workspace;
   } catch (error) {
