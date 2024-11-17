@@ -2,7 +2,7 @@
 
 import { AUTH_COOKIE } from "@/features/auth/others/constants";
 import { cookies } from "next/headers";
-import { Client, Account, Databases } from "node-appwrite"; // Using the server SDK
+import { Client, Account, Databases, Users } from "node-appwrite"; // Using the server SDK
 
 export async function createAdminClient() {
   const adminClient = new Client()
@@ -13,6 +13,9 @@ export async function createAdminClient() {
   return {
     get account() {
       return new Account(adminClient);
+    },
+    get users() {
+      return new Users(adminClient);
     },
   };
 }
