@@ -119,7 +119,7 @@ const app = new Hono()
 
     return c.json({ data: workspace });
   })
-  // - ============================= (MODIFY WOKRSPACE API) ==================================
+  // - ============================= (DELETE WOKRSPACE API) ==================================
   .delete("/:workspaceId", sessionMiddleware, async (c) => {
     const database = c.get("databases");
     const user = c.get("user");
@@ -141,6 +141,34 @@ const app = new Hono()
     await database.deleteDocument(DATABASE_ID, WORKSPACE_ID, workspaceId);
 
     return c.json({ data: { $id: workspaceId } });
+  })
+  // - ============================= (RESET INVITE CODE API) ==================================
+  .post("/:workspaceId/reset-invite-code", sessionMiddleware, async (c) => {
+    const database = c.get("databases");
+    const user = c.get("user");
+
+    const { workspaceId } = c.req.param();
+
+    const member = await getMemberService({
+      database,
+      workspaceId,
+      userId: user.$id,
+    });
+
+    if (!member || member.role !== MembersRole.ADMIN) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    const workspace = await database.updateDocument(
+      DATABASE_ID,
+      WORKSPACE_ID,
+      workspaceId,
+      {
+        inviteCode: generateInvitationCode(6),
+      }
+    );
+
+    return c.json({ data: workspace });
   });
 
 export default app;

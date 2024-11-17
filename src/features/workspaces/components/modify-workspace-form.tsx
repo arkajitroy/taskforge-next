@@ -21,11 +21,11 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeftIcon, ImageIcon, X } from "lucide-react";
+import { ArrowLeftIcon, CopyIcon, ImageIcon, X } from "lucide-react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn, copyToClipboard, generateInviteCodeLink } from "@/lib/utils";
 import {
   modifyWorkspaceSchema,
   TModifyWorkspaceSchema,
@@ -34,6 +34,8 @@ import { TWorkspace } from "../others/types";
 import { useModifyWorkspace } from "../api/use-modify-workspace";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteWorkspace } from "../api/use-delete-workspace";
+import CustomToolTip from "@/components/custom/custom-tooltip";
+import { useResetInviteCode } from "../api/use-reset-invite-code";
 
 type TModifyWorkspaceFormProps = {
   onCancel?: () => void;
@@ -44,9 +46,14 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
   onCancel,
   initialValues,
 }) => {
+  // - ===================== (QUERY/MUTATION API FUNC.)===================
   const { mutate, isPending } = useModifyWorkspace();
   const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } =
     useDeleteWorkspace();
+  const { mutate: resetInviteCode, isPending: isResetingInviteCode } =
+    useResetInviteCode();
+
+  // - ===================== (DIALOG FUNCTIONALITY) ======================
 
   const [DeleteDialog, confirmDialog] = useConfirm(
     "Delete Workspace",
@@ -54,8 +61,15 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
     "destructive"
   );
 
+  const [ResetInviteDialog, resetInviteDialog] = useConfirm(
+    "Reset Invitation Link",
+    "This Action will invalidate the current invite link",
+    "destructive"
+  );
+
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const fullInviteLink = generateInviteCodeLink(initialValues);
 
   const form = useForm<TModifyWorkspaceSchema>({
     resolver: zodResolver(modifyWorkspaceSchema),
@@ -91,6 +105,22 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
     );
   };
 
+  const handleResetInviteLink = async () => {
+    const ok = await resetInviteDialog();
+    if (!ok) return;
+
+    resetInviteCode(
+      {
+        param: { workspaceId: initialValues.$id },
+      },
+      {
+        onSuccess: () => {
+          router.refresh();
+        },
+      }
+    );
+  };
+
   const onSubmit = (values: TModifyWorkspaceSchema) => {
     console.log("DEBUG: ONSUBMIT CREATE WORKSPACE", { values });
     const formDataPayload = {
@@ -112,6 +142,7 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
   return (
     <div className="flex flex-col gap-y-4">
       <DeleteDialog />
+      <ResetInviteDialog />
       <Card className="w-full relative border-none">
         <Form {...form}>
           <CardHeader>
@@ -246,6 +277,40 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
       <Card className="w-full h-full border-none">
         <CardContent className="p-7">
           <div className="flex flex-col">
+            <h3 className="font-bold my-2">Invite Members</h3>
+            <p className="text-sm text-muted-foreground">
+              Use the invite link to add members to your workspace.
+            </p>
+            <div className="mt-4">
+              <div className="flex items-center gap-x-2">
+                <Input disabled value={fullInviteLink} />
+                <CustomToolTip tooltipText="copy invite code">
+                  <Button
+                    onClick={() => copyToClipboard(fullInviteLink)}
+                    variant={"secondary"}
+                    className="size-12"
+                  >
+                    <CopyIcon size={14} />
+                  </Button>
+                </CustomToolTip>
+              </div>
+            </div>
+            <Button
+              className="mt-6 w-fit ml-auto"
+              size={"sm"}
+              variant={"primary"}
+              type="button"
+              disabled={isPending || isResetingInviteCode}
+              onClick={handleResetInviteLink}
+            >
+              Reset Invite Link
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="w-full h-full border-none">
+        <CardContent className="p-7">
+          <div className="flex flex-col">
             <h3 className="font-bold my-2">Danger Zone</h3>
             <p className="text-sm text-muted-foreground">
               Actions in this section are irreversible. Proceed with caution while
@@ -256,7 +321,7 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
               size={"sm"}
               variant={"destructive"}
               type="button"
-              disabled={isPending}
+              disabled={isPending || isDeletingWorkspace}
               onClick={handleDelete}
             >
               Delete Workspace
@@ -267,7 +332,3 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
     </div>
   );
 };
-
-{
-  /* <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"></div> */
-}
