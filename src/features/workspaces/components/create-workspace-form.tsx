@@ -57,7 +57,6 @@ export const CreateWorkspaceForm: React.FC<TCreateWorkspaceFormProps> = ({
   };
 
   const onSubmit = (values: TCreateWorkspaceSchema) => {
-    console.log("DEBUG: ONSUBMIT CREATE WORKSPACE", { values });
     const formDataPayload = {
       ...values,
       imageURL: values.imageURL instanceof File ? values.imageURL : "",

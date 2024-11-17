@@ -6,14 +6,26 @@ import { Eye, EyeOff, Loader } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { registerFormSchema, TRegisterFormSchema } from "@/validations/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import DottedSeperator from "@/components/custom/dotted-seperator";
 import { useRegistration } from "../api/use-register";
 
@@ -38,7 +50,6 @@ export default function SignUpCard() {
       return;
     }
     mutate({ json: formData });
-    console.log("DEBUG-REGISTER-SUBMIT : ", formData);
     registerForm.reset();
     setConfirmPassword("");
   };
@@ -46,14 +57,19 @@ export default function SignUpCard() {
   return (
     <Card className="w-full max-w-md mx-auto shadow-lg">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">
+          Create an account
+        </CardTitle>
         <CardDescription className="text-center">
           Enter your details below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Form {...registerForm}>
-          <form onSubmit={registerForm.handleSubmit(formSubmitHandler)} className="space-y-4">
+          <form
+            onSubmit={registerForm.handleSubmit(formSubmitHandler)}
+            className="space-y-4"
+          >
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <FormField<TRegisterFormSchema>
@@ -173,7 +189,9 @@ export default function SignUpCard() {
             <Separator className="w-full" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">

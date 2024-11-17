@@ -12,7 +12,6 @@ export const getMemberService = async ({
   workspaceId,
   userId,
 }: GetMemberProps) => {
-  console.log("DEBUG => ", { database, workspaceId, userId });
   const member = await database.listDocuments(DATABASE_ID, MEMBERS_ID, [
     Query.equal("workspaceID", workspaceId),
     Query.equal("userID", userId),

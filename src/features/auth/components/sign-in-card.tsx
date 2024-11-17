@@ -42,7 +42,6 @@ export default function SignInCard() {
   });
 
   const formSubmitHandler = (formData: TLoginFormSchema) => {
-    console.log("DEBUG-LOGIN-SUBMIT : ", formData);
     mutate({ json: formData });
     loginForm.reset();
   };

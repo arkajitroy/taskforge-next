@@ -17,7 +17,7 @@ export default async function WorkspaceIdSettingsPage({
   if (!user) redirect("/sign-in");
 
   const initialValues = await getCurrentWorkspace({ workspaceId: params.workspaceID });
-  console.log("DEBUG :", initialValues);
+
   if (!initialValues) redirect(`/workspaces/${params.workspaceID}`);
 
   return (

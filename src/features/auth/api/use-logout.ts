@@ -13,7 +13,6 @@ export const useLogout = () => {
 
   const mutation = useMutation<ResponseType, RequestType>({
     mutationFn: async () => {
-      console.log("LOGOUT HANDLER");
       const response = await RPCClient.api.auth.logout["$post"]();
 
       if (!response.ok) throw new Error("Failed to Logout");

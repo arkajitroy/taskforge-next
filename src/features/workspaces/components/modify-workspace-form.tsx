@@ -122,7 +122,6 @@ export const ModifyWorkspaceForm: React.FC<TModifyWorkspaceFormProps> = ({
   };
 
   const onSubmit = (values: TModifyWorkspaceSchema) => {
-    console.log("DEBUG: ONSUBMIT CREATE WORKSPACE", { values });
     const formDataPayload = {
       ...values,
       imageURL: values.imageURL instanceof File ? values.imageURL : "",
