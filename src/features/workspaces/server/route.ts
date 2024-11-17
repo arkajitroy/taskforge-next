@@ -5,11 +5,13 @@ import sessionMiddleware from "@/lib/session-middleware";
 import { generateInvitationCode } from "@/lib/utils";
 import {
   createWorkspaceAPIValidator,
+  joinWorkspaceAPIValidator,
   modifyWorkspaceAPIValidator,
 } from "@/validations/routes/workspace";
 import { Hono } from "hono";
 import { ID, Query } from "node-appwrite";
 import { getMemberService } from "../services";
+import { TWorkspace } from "../others/types";
 
 const app = new Hono()
   // - ============================= (GET WOKRSPACE API) ==================================
@@ -167,6 +169,40 @@ const app = new Hono()
         inviteCode: generateInvitationCode(6),
       }
     );
+
+    return c.json({ data: workspace });
+  })
+  // - ============================= (JOIN USER INTO WORKSPACE API) ==================================
+  .post("/:workspaceId/join", sessionMiddleware, joinWorkspaceAPIValidator, async (c) => {
+    const { workspaceId } = c.req.param();
+    const { code } = c.req.valid("json");
+
+    const database = c.get("databases");
+    const user = c.get("user");
+
+    const member = await getMemberService({
+      database,
+      workspaceId,
+      userId: user.$id,
+    });
+
+    if (member) return c.json({ error: "Already a member" }, 400);
+
+    const workspace = await database.getDocument<TWorkspace>(
+      DATABASE_ID,
+      WORKSPACE_ID,
+      workspaceId
+    );
+
+    if (workspace.inviteCode !== code) {
+      return c.json({ error: "Invalid invite code!" }, 400);
+    }
+
+    await database.createDocument(DATABASE_ID, WORKSPACE_ID, ID.unique(), {
+      workspaceId,
+      userId: user.$id,
+      role: MembersRole.MEMBER,
+    });
 
     return c.json({ data: workspace });
   });

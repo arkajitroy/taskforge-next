@@ -20,5 +20,10 @@ export const modifyWorkspaceSchema = z.object({
     .optional(),
 });
 
+export const joinWorkspaceSchema = z.object({
+  code: z.string(),
+});
+
 export type TCreateWorkspaceSchema = z.infer<typeof createWorkspaceSchema>;
 export type TModifyWorkspaceSchema = z.infer<typeof modifyWorkspaceSchema>;
+export type TJoinWorkspaceSchema = z.infer<typeof joinWorkspaceSchema>;
