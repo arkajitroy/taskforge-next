@@ -89,8 +89,6 @@ const app = new Hono()
 
     const member = await getMemberService({ database, workspaceId, userId: user.$id });
 
-    console.log("MEMBER-DEBUG", member);
-
     if (!member || member.role !== MembersRole.ADMIN) {
       return c.json({ error: "Unauthorized" }, 401);
     }
@@ -198,9 +196,9 @@ const app = new Hono()
       return c.json({ error: "Invalid invite code!" }, 400);
     }
 
-    await database.createDocument(DATABASE_ID, WORKSPACE_ID, ID.unique(), {
-      workspaceId,
-      userId: user.$id,
+    await database.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
+      workspaceID: workspaceId,
+      userID: user.$id,
       role: MembersRole.MEMBER,
     });
 

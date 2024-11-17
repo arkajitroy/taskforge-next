@@ -23,7 +23,13 @@ export const useJoinWorkspace = () => {
         json,
       });
 
-      if (!response.ok) throw new Error("Failed to join workspace!");
+      if (response.status === 400) {
+        const responseData = await response.json();
+        if ("error" in responseData) throw new Error(responseData.error);
+        else throw new Error("Unexpected error format.");
+      }
+
+      if (response.status === 500) throw new Error("Failed to join workspace!");
 
       return await response.json();
     },

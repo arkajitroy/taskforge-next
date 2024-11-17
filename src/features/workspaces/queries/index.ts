@@ -12,6 +12,9 @@ import { createSessionClient } from "@/lib/appwrite";
 type TGetWorkspaceActionProps = {
   workspaceId: string;
 };
+type TGetCurrentWorkspaceInfoProps = {
+  workspaceId: string;
+};
 
 export const getCurrentWorkspaces = async () => {
   try {
@@ -55,8 +58,6 @@ export const getCurrentWorkspace = async ({ workspaceId }: TGetWorkspaceActionPr
     const database = new Databases(client);
     const user = await account.get();
 
-    console.log("DEBUG-PAYLOAD", { account, database, user });
-
     const member = await getMemberService({ database, userId: user.$id, workspaceId });
 
     if (!member) return null;
@@ -68,6 +69,26 @@ export const getCurrentWorkspace = async ({ workspaceId }: TGetWorkspaceActionPr
     );
 
     return workspace;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const getCurrentWorkspaceInfo = async ({
+  workspaceId,
+}: TGetCurrentWorkspaceInfoProps) => {
+  try {
+    const { databases, account } = await createSessionClient();
+
+    const workspace = await databases.getDocument<TWorkspace>(
+      DATABASE_ID,
+      WORKSPACE_ID,
+      workspaceId
+    );
+
+    return {
+      name: workspace.name,
+    };
   } catch (error) {
     return null;
   }
