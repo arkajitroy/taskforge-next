@@ -29,3 +29,11 @@ export function copyToClipboard(parsedText: string) {
     .writeText(parsedText)
     .then(() => toast.success("Invite link copied to clipboard!"));
 }
+
+export function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
