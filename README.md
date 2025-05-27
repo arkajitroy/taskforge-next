@@ -1,85 +1,105 @@
-# Taskforge Applicatiion
+# 🌟 Taskforge – Modern B2B Project Management SaaS
 
-Welcome to the taskforge project! This project aims to replicate the core functionalities of a advance task management tool. Our Tool provides an intuitive interface and powerful features to help you manage your projects efficiently.
+Welcome to **Taskforge**, a powerful and scalable project management platform tailored for B2B teams. Built using a modern fullstack stack, Taskforge offers an intuitive interface, real-time collaboration, and comprehensive features to supercharge productivity across organizations.
 
-## 📌 Techstack
+---
 
-| Tools                      | Description                                                                      |
-| -------------------------- | -------------------------------------------------------------------------------- |
-| **NextJS**                 | The core framework for building the frontend and handling server-side rendering. |
-| **Appwrite (BAAS)**        | Used for authentication, database, and backend services.                         |
-| **ShadCN and TailwindCSS** | Powering the UI with customizable components and utility-first styling.          |
-| **HonoJS**                 | Handling backend APIs with a lightweight and fast framework.                     |
-| **Tanstack React Query**   | Managing server-state and data fetching efficiently.                             |
-| **React Hook Form**        | Handling form state and validation seamlessly.                                   |
-| **ZOD Validation**         | Enforcing data validation and schema definitions.                                |
+## 🚀 Tech Stack
 
-## 📌 CORE Features
+| Tool / Framework            | Description                                                                 |
+| --------------------------- | --------------------------------------------------------------------------- |
+| **Next.js (App Router)**    | React-based framework for frontend development with SSR and client routing. |
+| **Node.js + Express + TS**  | TypeScript-based backend for scalable API development.                      |
+| **MongoDB + Mongoose**      | NoSQL document database used for storing all app data.                      |
+| **Google & GitHub OAuth**   | Secure user authentication via Google and GitHub providers.                 |
+| **ShadCN UI + TailwindCSS** | Customizable and modern UI components styled with utility-first CSS.        |
+| **TanStack React Query**    | Handles client-server state management and caching efficiently.             |
+| **React Hook Form + Zod**   | Declarative form state management with type-safe validation using schemas.  |
 
-- **User Authentication**: Secure user registration and login system.
-- **Project Management**: Create, update, and delete projects.
-- **Issue Tracking**: Create, assign, and track issues within projects.
-- **Kanban Board**: Visualize your workflow with a drag-and-drop Kanban board.
-- **Search and Filter**: Easily find issues with advanced search and filtering options.
-- **Comments**: Collaborate with team members by adding comments to issues.
-- **User Roles and Permissions**: Manage user roles and permissions for better control.
-- **Calendar**: Schedule and manage project deadlines and milestones with a calendar view.
+---
 
-## 📌 Key Features
+## 📌 Core Functionalities
 
-- **🏢 Workspaces**: Organize your projects into workspaces for better management.
-- **📊 Projects / Epics**: Create and manage projects and epics to structure your work.
-- **✅ Tasks**: Track tasks and their progress within projects.
-- **📋 Kanban Board View**: Visualize tasks with a drag-and-drop Kanban board.
-- **🗃️ Data Table View**: View and manage tasks in a data table format.
-- **📅 Calendar View**: Schedule and track tasks with a calendar view.
-- **✉️ Invite System**: Invite team members to collaborate on projects.
-- **⚙️ Workspace and Project Settings**: Customize settings for workspaces and projects.
-- **🖼️ Image Uploads**: Upload images for avatars and attachments.
-- **🔍 Advanced Search and Filtering**: Use advanced search and filtering options.
-- **📈 Analytics Dashboard**: View project analytics with a dashboard.
-- **👥 User Roles and Permissions**: Manage user roles and permissions.
-- **🔒 Authentication**: Supports OAuth and Email authentication.
-- **📱 Responsive Design**: Mobile-friendly responsive design.
+- 🔐 **OAuth Authentication** – Login using Google or GitHub securely.
+- 🏢 **Workspace Management** – Organize your work into isolated environments.
+- 📊 **Project and Epic Management** – Plan and structure work using projects and epics.
+- ✅ **Task Management** – Create, assign, prioritize, and track tasks.
+- 🧩 **Kanban Board** – Visual workflow for managing tasks with drag-and-drop.
+- 📋 **Data Table View** – Manage tasks in a sortable and searchable table format.
+- 📅 **Calendar View** – Visualize task deadlines using an interactive calendar.
+- ✉️ **Team Invites** – Invite collaborators to workspaces with custom roles.
+- ⚙️ **Workspace & Project Settings** – Configure preferences and behaviors.
+- 📎 **Image Uploads** – Upload avatars and task-related attachments.
+- 🔍 **Advanced Filters & Search** – Quickly find tasks by keyword, status, assignee, etc.
+- 📈 **Analytics Dashboard** – Track progress with visual insights and statistics.
+- 👥 **Role-based Access** – Owner, Admin, and Member roles for granular permissions.
+- 🌐 **Fully Responsive Design** – Optimized UX across all devices.
 
-## Getting Started
+---
 
-To get started with the Jira Clone project, follow these steps:
+## 🛠 Getting Started
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/impruthvi/jira-clone.git
-   ```
-2. **Install dependencies**:
-   ```bash
-   cd jira-clone
-   npm install
-   ```
-3. **Rename the environment file**:
-   ```bash
-   cp .env.example .env.local
-   ```
-4. **Start the development server**:
-   ```bash
-   npm start
-   ```
+Follow these steps to run Taskforge locally:
 
-## Contributing
+### 1. Clone the Repository
 
-We welcome contributions from the community! If you would like to contribute, please follow these steps:
+```bash
+git clone https://github.com/your-username/taskforge.git
+cd taskforge
+```
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes and commit them (`git commit -m 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a pull request.
+### 2. Install Dependencies
 
-## License
+```bash
+# Install frontend & backend dependencies
+npm install
+```
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+### 3. Setup Environment Variables
 
-## Join Us
+Rename the example environment file and provide your config:
 
-I invite other developers to join us in improving this project. Your contributions and ideas are welcome!
+```bash
+cp .env.example .env.local
+```
 
-Happy coding!
+Add the following (example values): **Backend Environment**
+
+```bash
+# Backend
+PORT=8000
+NODE_ENV=development
+
+MONGO_URI=
+
+SESSION_SECRET="session_secret_key"
+SESSION_EXPIRES_IN="1d"
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=http://localhost:8000/api/auth/google/callback
+
+FRONTEND_ORIGIN=http://localhost:5173
+FRONTEND_GOOGLE_CALLBACK_URL=
+```
+
+Add the following (example values): **Frontend Environment**
+
+```bash
+VITE_API_BASE_URL="http://localhost:8000/api"
+```
+
+### 4. Start the Application
+
+```bash
+# Run frontend and backend concurrently (if configured)
+npm run dev
+```
+
+Access the app at `http://localhost:3000`.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for full details.
